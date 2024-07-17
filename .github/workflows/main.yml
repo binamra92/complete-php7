@@ -29,10 +29,11 @@ jobs:
 
       - name: Run Snyk to check for vulnerabilities
         run: snyk test --all-projects
-        continue-on-error: true  # Ensure the pipeline continues even if vulnerabilities are found
+        continue-on-error: true  # This will ensure the pipeline continues even if vulnerabilities are found
 
       - name: Monitor project and report results to Snyk GUI
-        run: snyk monitor --project-name="OWASP Vulnerable Web App" --tags="OWASP"
+        run: snyk monitor --project-name="New-PHP-APP" --tags="pom"
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
           SNYK_ORG: ${{ secrets.SNYK_ORG }}
+# Hope it works! :)
