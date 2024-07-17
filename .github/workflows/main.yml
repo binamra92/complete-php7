@@ -18,25 +18,21 @@ jobs:
       - name: Install Snyk CLI
         run: npm install -g snyk
 
+      - name: Authenticate Snyk
+        run: snyk auth ${{ secrets.SNYK_TOKEN }}
+
       - name: Configure Snyk Endpoint
         run: snyk config set endpoint=https://app.au.snyk.io/api
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
       - name: Configure Snyk Organization
         run: snyk config set org=${{ secrets.SNYK_ORG }}
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
       - name: Run Snyk to check for vulnerabilities
         run: snyk test --all-projects
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-          SNYK_ORG: ${{ secrets.SNYK_ORG }}
         continue-on-error: true  # Ensure the pipeline continues even if vulnerabilities are found
 
       - name: Monitor project and report results to Snyk GUI
-        run: snyk monitor --project-name="Php App" --tags="pom"
+        run: snyk monitor --project-name="OWASP Vulnerable Web App" --tags="OWASP"
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
           SNYK_ORG: ${{ secrets.SNYK_ORG }}
