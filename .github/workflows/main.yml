@@ -18,11 +18,11 @@ jobs:
       - name: Install Snyk CLI
         run: npm install -g snyk
 
-      - name: Authenticate Snyk
-        run: snyk auth ${{ secrets.SNYK_TOKEN }}
-
       - name: Configure Snyk Endpoint
         run: snyk config set endpoint=https://app.au.snyk.io/api
+        
+      - name: Authenticate Snyk
+        run: snyk auth ${{ secrets.SNYK_TOKEN }}
 
       - name: Configure Snyk Organization
         run: snyk config set org=${{ secrets.SNYK_ORG }}
