@@ -1,0 +1,42 @@
+name: Snyk Security Scan
+
+on: [push, pull_request]
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'  # Specify the Node.js version
+
+      - name: Install Snyk CLI
+        run: npm install -g snyk
+
+      - name: Configure Snyk Endpoint
+        run: snyk config set endpoint=https://app.au.snyk.io/api
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+      - name: Configure Snyk Organization
+        run: snyk config set org=${{ secrets.SNYK_ORG }}
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+      - name: Run Snyk to check for vulnerabilities
+        run: snyk test --all-projects
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+          SNYK_ORG: ${{ secrets.SNYK_ORG }}
+        continue-on-error: true  # Ensure the pipeline continues even if vulnerabilities are found
+
+      - name: Monitor project and report results to Snyk GUI
+        run: snyk monitor --project-name="Php App" --tags="pom"
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+          SNYK_ORG: ${{ secrets.SNYK_ORG }}
